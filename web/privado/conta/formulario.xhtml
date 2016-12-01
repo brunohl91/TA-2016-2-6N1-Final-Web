@@ -1,0 +1,234 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:form id="formEdicao">
+      <h:panelGroup rendered="#{controleConta.editando}">
+            <div class="ui-fluid">
+                <p:messages/>
+                <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-20"
+                             layout="grid" styleClass="ui-panelgrid-blank">
+                    <f:facet name="header">
+                        <p:outputLabel value="Edição de Conta"/>
+                    </f:facet>
+                  
+                    <p:outputLabel for="txtID" value="ID"/>
+                    <p:inputText id="txtID" value="#{controleConta.objeto.id}" readonly="true"
+                                 size="10"/>
+                    <p:outputLabel for="txtDescricao" value="Descrição"/>
+                    <p:inputText id="txtDescricao" value="#{controleConta.objeto.descricao}"
+                                 size="40" maxlength="40"
+                                 placeholder="Obrigatório"/>
+                    
+                    <p:commandButton value="Salvar" icon="ui-icon-disk"
+                                     actionListener="#{controleConta.salvar()}"
+                                     update="formEdicao :formListagem"/>
+                </p:panelGrid>
+                <h:panelGroup id="painelUsuario">
+                  <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-20" layout="grid" 
+                               styleClass="ui-panelgrid-blank" rendered="#{controleConta.editandoUsuario}">
+                    <f:facet name="header">
+                      <p:outputLabel value="Edição de Usuário"/>
+                    </f:facet>
+                    <p:outputLabel value="Usuário" for="selectUsuario"/>
+                    <p:selectOneMenu value="#{controleConta.usuario}" id="selectUsuario">
+                      <f:converter converterId="converterUsuario" />
+                      <f:selectItem itemLabel="Selecione um registro" noSelectionOption="true"/>
+                      <f:selectItems value="#{controleConta.daoUsuario.listaTodos}" var="u" itemLabel="#{u.nome}" />
+                    </p:selectOneMenu>
+                    <p:commandButton value="Salvar usuário" icon="ui-icon-disk" actionListener="#{controleConta.salvarUsuario()}" update="painelUsuario listagemUsuario" />
+                  </p:panelGrid>
+                  
+                  <!-- Manutenção de Ligações -->
+                  <h:panelGroup id="painelLigacoes">
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-13"
+                                 layout="grid" styleClass="ui-panelgrid-blank"
+                                 rendered="#{controleConta.editandoLigacao}">
+                        <f:facet name="header">
+                            <p:outputLabel value="Edição de ligação"/>
+                        </f:facet> 
+                        <p:outputLabel for="txtIDLigacao" value="ID"/>
+                        <p:inputText id="txtIDLigacao" value="#{controleConta.ligacao.id}" readonly="true"
+                                     size="10"/>
+                        <p:outputLabel for="txtRamalLigacao" value="Ramal"/>
+                        <p:inputText id="txtRamalLigacao" value="#{controleConta.ligacao.ramal}"
+                                     size="40" maxlength="40"
+                                     placeholder="Obrigatório"/>
+                        <p:outputLabel for="txtNumeroLigacao" value="Número"/>
+                        <p:inputText id="txtNumeroLigacao" value="#{controleConta.ligacao.numero}"
+                                     size="16" maxlength="16"
+                                     placeholder="Obrigatório"/>
+                        <p:outputLabel for="txtCustoLigacao" value="Custo"/>
+                        <p:inputText id="txtCustoLigacao" value="#{controleConta.ligacao.custo}"
+                                     size="10" maxlength="10"
+                                     placeholder="Obrigatório"/>
+                        <p:outputLabel for="txtCustoCobradoLigacao" value="Custo Cobrado"/>
+                        <p:inputText id="txtCustoCobradoLigacao" value="#{controleConta.ligacao.custoCobrado}"
+                                     size="10" maxlength="10"
+                                     placeholder="Obrigatório"/>
+                        <p:outputLabel for="txtDuracaoLigacao" value="Duração"/>
+                        <p:inputText id="txtDuracaoLigacao" value="#{controleConta.ligacao.duracao}"
+                                     size="10" maxlength="10"
+                                     placeholder="Obrigatório"/>
+                        <p:commandButton value="Salvar Ligação" icon="ui-icon-disk"
+                                         actionListener="#{controleConta.salvarLigacao()}"
+                                         update="@form"
+                                         id="btnSalvarLigacao"/>                         
+                    </p:panelGrid>                
+                </h:panelGroup>
+                  
+                  <!-- Manutenção de Serviços -->
+                  <h:panelGroup id="painelServicos">
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-13"
+                                 layout="grid" styleClass="ui-panelgrid-blank"
+                                 rendered="#{controleConta.editandoServico}">
+                        <f:facet name="header">
+                            <p:outputLabel value="Edição de serviço"/>
+                        </f:facet> 
+                        <p:outputLabel for="txtIDServico" value="ID"/>
+                        <p:inputText id="txtIDServico" value="#{controleConta.servico.id}" readonly="true"
+                                     size="10"/>
+                        <p:outputLabel for="txtNomeServico" value="Nome"/>
+                        <p:inputText id="txtNomeServico" value="#{controleConta.servico.nome}"
+                                     size="40" maxlength="40"
+                                     placeholder="Obrigatório"/>
+                        <p:outputLabel for="txtCustoServico" value="Custo"/>
+                        <p:inputText id="txtCustoServico" value="#{controleConta.servico.custo}"
+                                     size="10" maxlength="10"
+                                     placeholder="Obrigatório"/>
+                        <p:outputLabel for="txtCustoCobradoServico" value="Custo Cobrado"/>
+                        <p:inputText id="txtCustoCobradoServico" value="#{controleConta.servico.custoCobrado}"
+                                     size="10" maxlength="10"
+                                     placeholder="Obrigatório"/>
+                        <p:outputLabel for="txtQtdeServico" value="Quantidade"/>
+                        <p:inputText id="txtQtdeServico" value="#{controleConta.servico.qtde}"
+                                     size="10" maxlength="10"
+                                     placeholder="Obrigatório"/>
+                        <p:outputLabel for="txtUnidadeServico" value="Unidade"/>
+                        <p:inputText id="txtUnidadeServico" value="#{controleConta.servico.unidade}"
+                                     size="40" maxlength="40"
+                                     placeholder="Obrigatório"/>
+                        <p:commandButton value="Salvar Serviço" icon="ui-icon-disk"
+                                         actionListener="#{controleConta.salvarServico()}"
+                                         update="@form"
+                                         id="btnSalvarServico"/>                         
+                    </p:panelGrid>                
+                </h:panelGroup>
+                  
+                </h:panelGroup>
+            </div>
+            <h:panelGroup id="listagemUsuario">
+              <h:panelGroup rendered="#{!controleConta.editandoUsuario}">
+                <p:commandButton value="Novo usuário" icon="ui-icon-plus" actionListener="#{controleConta.novoUsuario()}" update="listagemUsuario painelUsuario" />
+                <p:dataTable value="#{controleConta.objeto.usuarios}" var="user" reflow="true">
+                  <f:facet name="header">
+                    <p:outputLabel value="Usuários da Conta" />
+                  </f:facet>
+                  <p:column headerText="Id">
+                    <p:outputLabel value="#{user.id}" />
+                  </p:column>
+                  <p:column headerText="Nome">
+                    <p:outputLabel value="#{user.nome}" />
+                  </p:column>
+                  <p:column headerText="Cargo">
+                    <p:outputLabel value="#{user.cargo}" />
+                  </p:column>
+                  <p:column headerText="CC">
+                    <p:outputLabel value="#{user.cc}" />
+                  </p:column>
+                  <p:column headerText="Ações">
+                    <div align="center">
+                      <p:commandButton icon="ui-icon-trash" actionListener="#{controleConta.excluriUsuario(user)}" process="@this" update="@form"/>
+                    </div>
+                  </p:column>
+                </p:dataTable>
+              </h:panelGroup>
+            </h:panelGroup>
+            <br/>
+            <h:panelGroup id="listagemLigacao">
+              <h:panelGroup rendered="#{!controleConta.editandoUsuario}">  
+                <p:commandButton value="Novo ligação" icon="ui-icon-plus"
+                                 actionListener="#{controleConta.novaLigacao()}"
+                                 update="listagemLigacao painelLigacoes"
+                                 id="btnNovaLigacao"/> 
+                <p:dataTable value="#{controleConta.objeto.ligacoes}" var="ligacao" reflow="true">
+                  <f:facet name="header">
+                    <p:outputLabel value="Ligações da Conta" />
+                  </f:facet>
+                  <p:column headerText="Id">
+                    <p:outputLabel value="#{ligacao.id}" />
+                  </p:column>
+                  <p:column headerText="Ramal">
+                    <p:outputLabel value="#{ligacao.ramal}" />
+                  </p:column>
+                  <p:column headerText="Numero">
+                    <p:outputLabel value="#{ligacao.numero}" />
+                  </p:column>
+                  <p:column headerText="Custo">
+                    <p:outputLabel value="#{ligacao.custo}" />
+                  </p:column>
+                  <p:column headerText="Custo Cobrado">
+                    <p:outputLabel value="#{ligacao.custoCobrado}" />
+                  </p:column>
+                  <p:column headerText="Duração">
+                    <p:outputLabel value="#{ligacao.duracao}" />
+                  </p:column>
+                  <p:column headerText="Ações">
+                      <div align="center">                                
+                        <p:commandButton icon="ui-icon-pencil"
+                                         actionListener="#{controleConta.alterarLigacao(index)}"
+                                         process="@this"
+                                         update="@form"/>                                
+                        <p:commandButton icon="ui-icon-trash"
+                                         actionListener="#{controleConta.excluirLigacao(index)}"
+                                         process="@this" update="@form"/>
+                      </div>
+                  </p:column>
+                </p:dataTable>
+              </h:panelGroup>
+            </h:panelGroup>
+            <br/>
+            <h:panelGroup id="listagemServico">
+              <h:panelGroup rendered="#{!controleConta.editandoUsuario}">
+                <p:commandButton value="Novo serviço" icon="ui-icon-plus"
+                                 actionListener="#{controleConta.novoServico()}"
+                                 update="listagemServico painelServicos"
+                                 id="btnNovoServico"/> 
+                <p:dataTable value="#{controleConta.objeto.servicos}" var="servico" reflow="true">
+                  <f:facet name="header">
+                    <p:outputLabel value="Serviços da Conta" />
+                  </f:facet>
+                  <p:column headerText="Id">
+                    <p:outputLabel value="#{servico.id}" />
+                  </p:column>
+                  <p:column headerText="Nome">
+                    <p:outputLabel value="#{servico.nome}" />
+                  </p:column>
+                  <p:column headerText="Custo">
+                    <p:outputLabel value="#{servico.custo}" />
+                  </p:column>
+                  <p:column headerText="Quantidade">
+                    <p:outputLabel value="#{servico.qtde}" />
+                  </p:column>
+                  <p:column headerText="Unidade">
+                    <p:outputLabel value="#{servico.unidade}" />
+                  </p:column>
+                  <p:column headerText="Ações">
+                      <div align="center">                                
+                        <p:commandButton icon="ui-icon-pencil"
+                                         actionListener="#{controleConta.alterarServico(index)}"
+                                         process="@this"
+                                         update="@form"/>                                
+                        <p:commandButton icon="ui-icon-trash"
+                                         actionListener="#{controleConta.excluirServico(index)}"
+                                         process="@this" update="@form"/>
+                      </div>
+                  </p:column>     
+                </p:dataTable>
+              </h:panelGroup>
+            </h:panelGroup>
+        </h:panelGroup>
+    </h:form>
+</html>

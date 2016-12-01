@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/templates/template.xhtml">
+        <ui:define name="titulo">Manutenção de Ligações</ui:define>
+        <ui:define name="conteudo">
+            <h:form id="formListagem">
+                <h:panelGroup rendered="#{!controleLigacao.editando}">
+                    <p:messages/>
+                    <p:commandButton value="Novo" icon="ui-icon-plus"
+                                     actionListener="#{controleLigacao.novo()}"
+                                     update="formEdicao formListagem"/>
+                    <p:dataTable value="#{controleLigacao.dao.listaObjetos}" var="obj"
+                                 reflow="true" id="listagem" rows="4">
+                        <f:facet name="header">
+                          <div class="ui-fluid">
+                            <p:panelGrid columns="7" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="col-md-1, col-md-2, col-md-1, col-md-3, col-md-1 col-md-2 col-md-2">
+                              <p:outputLabel value="Ordem: "/>
+                              <p:selectOneMenu value="#{controleLigacao.dao.ordem}">
+                                <f:selectItem itemLabel="ID" itemValue="id" />
+                                <f:selectItem itemLabel="Ramal" itemValue="ramal" />
+                                <f:selectItem itemLabel="Número" itemValue="numero" />
+                                <p:ajax update="listagem" />
+                              </p:selectOneMenu>
+                              <p:outputLabel value="Filtro"/>
+                              <p:inputText value="#{controleLigacao.dao.filtro}" size="30" />
+                              <p:commandButton value="Filtrar" update="listagem" icon="ui-icon-search" />
+                              <p:outputLabel value="Máximo de Objetos:"/>
+                              <p:inputNumber value="#{controleLigacao.dao.maximoObjetos}" size="4" decimalPlaces="0" decimalSeparator="" thousandSeparator="" />
+                            </p:panelGrid>
+                          </div>
+                        </f:facet>
+                        <f:facet name="footer">
+                          <p:outputLabel value="#{controleLigacao.dao.mensagemNavegacao} &nbsp; &nbsp;" />
+                          <p:commandButton value="Primeiro" actionListener="#{controleLigacao.dao.primeiro()}" update="listagem" />
+                          <p:commandButton value="Anterior" actionListener="#{controleLigacao.dao.anterior()}" update="listagem" />
+                          <p:commandButton value="Próximo" actionListener="#{controleLigacao.dao.proximo()}" update="listagem" />
+                          <p:commandButton value="Último" actionListener="#{controleLigacao.dao.ultimo()}" update="listagem" />
+                        </f:facet>
+                        <p:column headerText="ID">
+                            <p:outputLabel value="#{obj.id}"/>
+                        </p:column>
+                        <p:column headerText="Ramal">
+                            <p:outputLabel value="#{obj.ramal}"/>
+                        </p:column>
+                        <p:column headerText="Número">
+                            <p:outputLabel value="#{obj.numero}"/>
+                        </p:column>
+                        <p:column headerText="Custo">
+                            <p:outputLabel value="#{obj.custo}"/>
+                        </p:column>
+                        <p:column headerText="Custo Cobrado">
+                            <p:outputLabel value="#{obj.custoCobrado}"/>
+                        </p:column>
+                        <p:column headerText="Duração">
+                            <p:outputLabel value="#{obj.duracao}"/>
+                        </p:column>
+                        <p:column headerText="Conta">
+                            <p:outputLabel value="#{obj.conta.descricao}"/>
+                        </p:column>
+                        <p:column headerText="Ações">
+                            <div align="center">
+                                <p:commandButton icon="ui-icon-pencil"
+                                                 actionListener="#{controleLigacao.alterar(obj.id)}"
+                                                 process="@form"
+                                                 update=":formEdicao formListagem"/>
+                                <p:commandButton icon="ui-icon-trash"
+                                                 actionListener="#{controleLigacao.remover(obj.id)}"
+                                                 process="@form" update=":formListagem"/>
+                            </div>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGroup>
+            </h:form>
+            <ui:include src="/privado/ligacao/formulario.xhtml"/>
+        </ui:define>
+    </ui:composition>
+</html>
+

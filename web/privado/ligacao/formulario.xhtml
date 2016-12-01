@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:form id="formEdicao">
+      <h:panelGroup rendered="#{controleLigacao.editando}">
+            <div class="ui-fluid">
+                <p:messages/>
+                <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-20"
+                             layout="grid" styleClass="ui-panelgrid-blank">
+                    <f:facet name="header">
+                        <p:outputLabel value="Edição de Ligações"/>
+                    </f:facet>
+                  
+                    <p:outputLabel for="txtID" value="ID"/>
+                    <p:inputText id="txtID" value="#{controleLigacao.objeto.id}" readonly="true"
+                                 size="10"/>
+                    <p:outputLabel for="txtRamal" value="Ramal"/>
+                    <p:inputText id="txtRamal" value="#{controleLigacao.objeto.ramal}"
+                                 size="40" maxlength="40"
+                                 placeholder="Obrigatório"/>
+                    <p:outputLabel for="txtNumero" value="Número"/>
+                    <p:inputText id="txtNumero" value="#{controleLigacao.objeto.numero}"
+                                 size="16" maxlength="16"
+                                 placeholder="Obrigatório"/>
+                    <p:outputLabel for="txtCusto" value="Custo"/>
+                    <p:inputText id="txtCusto" value="#{controleLigacao.objeto.custo}"
+                                 size="10" maxlength="10"
+                                 placeholder="Obrigatório"/>
+                    <p:outputLabel for="txtCustoCobrado" value="Custo Cobrado"/>
+                    <p:inputText id="txtCustoCobrado" value="#{controleLigacao.objeto.custoCobrado}"
+                                 size="10" maxlength="10"
+                                 placeholder="Obrigatório"/>
+                    <p:outputLabel for="txtDuracao" value="Duração"/>
+                    <p:inputText id="txtDuracao" value="#{controleLigacao.objeto.duracao}"
+                                 size="10" maxlength="10"
+                                 placeholder="Obrigatório"/>
+                    <p:outputLabel for="selectConta" value="Conta"/>
+                    <p:selectOneMenu value="#{controleLigacao.objeto.conta}" id="selectConta">
+                      <f:converter converterId="converterConta" />
+                      <f:selectItem itemLabel="Selecione um registro" noSelectionOption="true" />
+                      <f:selectItems value="#{controleLigacao.daoConta.listaTodos}" var="c" itemLabel="#{c.descricao}" />
+                    </p:selectOneMenu>
+                    
+                    <p:commandButton value="Salvar" icon="ui-icon-disk"
+                                     actionListener="#{controleLigacao.salvar()}"
+                                     update="formEdicao :formListagem"/>
+                </p:panelGrid>
+            </div>
+        </h:panelGroup>
+    </h:form>
+</html>

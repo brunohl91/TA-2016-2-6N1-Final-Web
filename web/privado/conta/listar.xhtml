@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/templates/template.xhtml">
+        <ui:define name="titulo">Manutenção de Contas</ui:define>
+        <ui:define name="conteudo">
+            <h:form id="formListagem">
+                <h:panelGroup rendered="#{!controleConta.editando}">
+                    <p:messages/>
+                    <p:commandButton value="Novo" icon="ui-icon-plus"
+                                     actionListener="#{controleConta.novo()}"
+                                     update="formEdicao formListagem"/>
+                    <p:dataTable value="#{controleConta.dao.listaObjetos}" var="obj"
+                                 reflow="true" id="listagem" rows="4">
+                        <f:facet name="header">
+                          <div class="ui-fluid">
+                            <p:panelGrid columns="7" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="col-md-1, col-md-2, col-md-1, col-md-3, col-md-1 col-md-2 col-md-2">
+                              <p:outputLabel value="Ordem: "/>
+                              <p:selectOneMenu value="#{controleConta.dao.ordem}">
+                                <f:selectItem itemLabel="ID" itemValue="id" />
+                                <f:selectItem itemLabel="Descrição" itemValue="descricao" />
+                                <p:ajax update="listagem" />
+                              </p:selectOneMenu>
+                              <p:outputLabel value="Filtro"/>
+                              <p:inputText value="#{controleConta.dao.filtro}" size="30" />
+                              <p:commandButton value="Filtrar" update="listagem" icon="ui-icon-search" />
+                              <p:outputLabel value="Máximo de Objetos:"/>
+                              <p:inputNumber value="#{controleConta.dao.maximoObjetos}" size="4" decimalPlaces="0" decimalSeparator="" thousandSeparator="" />
+                            </p:panelGrid>
+                          </div>
+                        </f:facet>
+                        <f:facet name="footer">
+                          <p:outputLabel value="#{controleConta.dao.mensagemNavegacao} &nbsp; &nbsp;" />
+                          <p:commandButton value="Primeiro" actionListener="#{controleConta.dao.primeiro()}" update="listagem" />
+                          <p:commandButton value="Anterior" actionListener="#{controleConta.dao.anterior()}" update="listagem" />
+                          <p:commandButton value="Próximo" actionListener="#{controleConta.dao.proximo()}" update="listagem" />
+                          <p:commandButton value="Último" actionListener="#{controleConta.dao.ultimo()}" update="listagem" />
+                        </f:facet>
+                        <p:column headerText="ID">
+                            <p:outputLabel value="#{obj.id}"/>
+                        </p:column>
+                        <p:column headerText="Descrição">
+                            <p:outputLabel value="#{obj.descricao}"/>
+                        </p:column>
+                        <p:column headerText="Ações">
+                            <div align="center">
+                                <p:commandButton icon="ui-icon-pencil"
+                                                 actionListener="#{controleConta.alterar(obj.id)}"
+                                                 process="@form"
+                                                 update=":formEdicao formListagem"/>
+                                <p:commandButton icon="ui-icon-trash"
+                                                 actionListener="#{controleConta.remover(obj.id)}"
+                                                 process="@form" update=":formListagem"/>
+                            </div>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGroup>
+            </h:form>
+            <ui:include src="/privado/conta/formulario.xhtml"/>
+        </ui:define>
+    </ui:composition>
+</html>
+
